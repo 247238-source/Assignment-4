@@ -1,0 +1,60 @@
+﻿@inject task6.Services.NotificationService NotifService
+@inject task6.Services.NotificationConfig Config
+@implements IDisposable
+
+<div class="card p-3 shadow-sm border-info h-100">
+    <h5 class="fw-bold text-info mb-3">🔔 Inbox</h5>
+
+    @if (notifications == null)
+    {
+        <p class="text-muted fst-italic">Fetching notifications...</p>
+    }
+    else
+    {
+        <ul class="list-group">
+            @foreach (var note in notifications)
+            {
+                @if (Config.NotificationStyle == "Detailed")
+                {
+                    <li class="list-group-item list-group-item-warning mb-2 border rounded shadow-sm p-3">
+                        <h6 class="fw-bold mb-1">System Update</h6>
+                        <p class="mb-0 text-muted small">@note</p>
+                        <div class="text-end"><small class="text-secondary" style="font-size: 0.75rem;">Just now</small></div>
+                    </li>
+                }
+                else
+                {
+                    <li class="list-group-item py-2 px-3 mb-1 border-start border-4 border-warning bg-light small">
+                        @note
+                    </li>
+                }
+            }
+        </ul>
+    }
+</div>
+
+@code {
+    private List<string>? notifications;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Config.OnConfigChanged += ReloadNotifications;
+        await FetchData();
+    }
+
+    private async void ReloadNotifications()
+    {
+        await FetchData();
+        InvokeAsync(StateHasChanged);
+    }
+
+    private async Task FetchData()
+    {
+        notifications = await NotifService.GetNotificationsAsync();
+    }
+
+    public void Dispose()
+    {
+        Config.OnConfigChanged -= ReloadNotifications;
+    }
+}
