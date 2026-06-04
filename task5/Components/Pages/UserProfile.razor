@@ -1,0 +1,31 @@
+﻿@inject task5.Services.AuthenticationStateService AuthService
+@implements IDisposable
+
+<div class="card p-3 shadow-sm mt-3 border-info">
+    <h4>User Profile</h4>
+
+    @if (AuthService.IsAuthenticated)
+    {
+        <div class="alert alert-success m-0 fw-bold">
+            🎉 Welcome back, User! You are securely logged in.
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning m-0">
+            ⚠️ Please log in to view your profile dashboard.
+        </div>
+    }
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        AuthService.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        AuthService.OnChange -= StateHasChanged;
+    }
+}
