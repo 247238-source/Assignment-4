@@ -1,0 +1,42 @@
+﻿@page "/Bindings"
+@rendermode InteractiveServer
+
+<div class="container mt-4">
+    <h3 class="mb-3 text-primary">APPLICATION 1</h3>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card p-4 shadow-sm border-0 bg-light">
+
+                <div class="form-group mb-3">
+                    <label for="userNameInput" class="form-label fw-bold text-secondary">Enter your name here:</label>
+                    <input id="userNameInput"
+                           type="text"
+                           class="form-control form-control-lg border-2"
+                           @bind="studentName"
+                           @bind:event="oninput"
+                           placeholder="Your name..." />
+                </div>
+
+                @if (!string.IsNullOrEmpty(studentName))
+                {
+                    <div class="alert alert-success border-0 shadow-sm mt-3">
+                        <h4 class="alert-heading fw-bold mb-1">Greetings!</h4>
+                        <p class="mb-0 fs-5">Hello, <strong>@studentName</strong>! Welcome to the Visual Programming Assignment.</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="p-2 mt-2 text-muted fst-italic border-start border-3 ps-3">
+                        The live greeting message will generate here as soon as you begin typing above.
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string studentName = "";
+}
