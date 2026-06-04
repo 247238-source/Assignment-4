@@ -1,0 +1,89 @@
+﻿@page "/"
+@rendermode InteractiveServer
+@using task8.Data
+@using Microsoft.EntityFrameworkCore
+@inject TodoContext DbContext
+
+<div class="container mt-4">
+    <h3 class="mb-3 text-primary">Task 8: Database-Connected To-Do List</h3>
+
+    <div class="card p-4 shadow-sm bg-light">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" @bind="newTaskDescription" placeholder="What needs to be done?" />
+            <button class="btn btn-primary" @onclick="AddTask">Add Task</button>
+            <button class="btn btn-danger fw-bold ms-2" @onclick="ClearAll">Clear All</button>
+        </div>
+
+        @if (tasks == null)
+        {
+            <p>Loading database...</p>
+        }
+        else
+        {
+            <ul class="list-group">
+                @foreach (var task in tasks)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <input type="checkbox" class="form-check-input me-2" checked="@task.IsCompleted" @onchange="@(e => ToggleTask(task))" />
+                            <span class="@(task.IsCompleted ? "text-decoration-line-through text-muted" : "")">
+                                @task.Description
+                            </span>
+                        </div>
+                        <button class="btn btn-sm btn-outline-danger" @onclick="() => DeleteTask(task)">Delete</button>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+</div>
+
+@code {
+    private List<TodoItem>? tasks;
+    private string newTaskDescription = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTasks();
+    }
+
+    private async Task LoadTasks()
+    {
+        tasks = await DbContext.TodoItems.ToListAsync();
+    }
+
+    private async Task AddTask()
+    {
+        if (!string.IsNullOrWhiteSpace(newTaskDescription))
+        {
+            var newTask = new TodoItem { Description = newTaskDescription, IsCompleted = false };
+            DbContext.TodoItems.Add(newTask);
+            await DbContext.SaveChangesAsync();
+
+            newTaskDescription = "";
+            await LoadTasks();
+        }
+    }
+
+    private async Task ToggleTask(TodoItem task)
+    {
+        task.IsCompleted = !task.IsCompleted;
+        DbContext.TodoItems.Update(task);
+        await DbContext.SaveChangesAsync();
+        await LoadTasks();
+    }
+
+    private async Task DeleteTask(TodoItem task)
+    {
+        DbContext.TodoItems.Remove(task);
+        await DbContext.SaveChangesAsync();
+        await LoadTasks();
+    }
+
+    private async Task ClearAll()
+    {
+        DbContext.TodoItems.RemoveRange(DbContext.TodoItems);
+        await DbContext.SaveChangesAsync();
+        await LoadTasks();
+    }
+}
