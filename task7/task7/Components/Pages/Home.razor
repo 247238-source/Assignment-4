@@ -1,0 +1,53 @@
+﻿@page "/"
+@rendermode InteractiveServer
+@inject IJSRuntime JSRuntime
+
+<div class="container mt-5 text-center">
+    <div class="card p-5 shadow-lg mx-auto" style="max-width: 500px;">
+        <h2 class="mb-4 fw-bold">Task 7: Theme Switcher</h2>
+
+        <p class="mb-4">
+            Current Theme: <strong>@(isDarkMode ? "Dark" : "Light")</strong>
+        </p>
+
+        <button class="btn btn-lg @(isDarkMode ? "btn-light text-dark" : "btn-dark text-light") w-100 fw-bold shadow-sm" @onclick="ToggleTheme">
+            @(isDarkMode ? "☀️ Switch to Light Mode" : "🌙 Switch to Dark Mode")
+        </button>
+    </div>
+</div>
+
+@code {
+    private bool isDarkMode = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var savedTheme = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "themePreference");
+
+            if (savedTheme == "dark-mode")
+            {
+                isDarkMode = true;
+                StateHasChanged(); 
+            }
+
+            await ApplyThemeToBody();
+        }
+    }
+
+    private async Task ToggleTheme()
+    {
+        isDarkMode = !isDarkMode;
+        string themeClass = isDarkMode ? "dark-mode" : "light-mode";
+
+        await JSRuntime.InvokeVoidAsync("localStorage.setItem", "themePreference", themeClass);
+
+        await ApplyThemeToBody();
+    }
+
+    private async Task ApplyThemeToBody()
+    {
+        string themeClass = isDarkMode ? "dark-mode" : "light-mode";
+        await JSRuntime.InvokeVoidAsync("document.body.setAttribute", "class", themeClass);
+    }
+}
