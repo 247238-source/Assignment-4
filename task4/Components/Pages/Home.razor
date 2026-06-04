@@ -1,0 +1,84 @@
+﻿@page "/"
+@rendermode InteractiveServer
+
+<div class="container mt-4">
+    <h3 class="mb-3 text-primary">Task 4: Dynamic Step Counter</h3>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card p-4 shadow-sm border-0 bg-light text-center">
+
+
+                <div class="py-4 my-3 bg-white rounded shadow-sm border">
+                    <span class="text-muted d-block text-uppercase small fw-bold tracking-wider">Total</span>
+                    <h1 class="display-2 fw-bold text-primary my-2">@stepCount</h1>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold text-secondary small">Step Step Increment Interval:</label>
+                    <div class="d-flex justify-content-center gap-2">
+                        @foreach (int val in stepIntervals)
+                        {
+                            <button class="btn btn-sm px-3 fw-bold @(selectedInterval == val ? "btn-secondary" : "btn-outline-secondary")"
+                                    @onclick="() => SetInterval(val)">
+                                ± @val
+                            </button>
+                        }
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-6">
+                        <button class="btn btn-danger btn-lg w-100 fw-bold shadow-sm" @onclick="DecrementSteps">
+                            <span class="fs-4">−</span> Decrease
+                        </button>
+                    </div>
+                    <div class="col-6">
+                        <button class="btn btn-success btn-lg w-100 fw-bold shadow-sm" @onclick="IncrementSteps">
+                            <span class="fs-4">+</span> Increase
+                        </button>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <button class="btn btn-outline-danger btn-sm px-4 fw-bold border-2" @onclick="ResetCounter">
+                        Reset Counter
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private int stepCount = 0;
+    private int selectedInterval = 1;
+    private readonly int[] stepIntervals = { 1, 5, 10 };
+
+    private void SetInterval(int val)
+    {
+        selectedInterval = val;
+    }
+
+    private void IncrementSteps()
+    {
+        stepCount += selectedInterval;
+    }
+
+    private void DecrementSteps()
+    {
+        // Prevents step counts from dropping below zero
+        if (stepCount - selectedInterval >= 0)
+        {
+            stepCount -= selectedInterval;
+        }
+        else
+        {
+            stepCount = 0;
+        }
+    }
+
+    private void ResetCounter()
+    {
+        stepCount = 0;
+    }
+}
