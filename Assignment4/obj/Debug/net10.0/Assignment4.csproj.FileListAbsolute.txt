@@ -84,3 +84,4 @@ C:\Users\T480\Desktop\Assignment4\Assignment4\obj\Debug\net10.0\refint\Assignmen
 C:\Users\T480\Desktop\Assignment4\Assignment4\obj\Debug\net10.0\Assignment4.pdb
 C:\Users\T480\Desktop\Assignment4\Assignment4\obj\Debug\net10.0\Assignment4.genruntimeconfig.cache
 C:\Users\T480\Desktop\Assignment4\Assignment4\obj\Debug\net10.0\ref\Assignment4.dll
+C:\Users\T480\Desktop\Assignment4\Assignment4\obj\Debug\net10.0\Assignment4.sourcelink.json

@@ -50,6 +50,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xXZWF0aGVyLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/T480/Desktop/Assignment4/Assignment4/Components/RegistrationForm.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSZWdpc3RyYXRpb25Gb3JtLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/T480/Desktop/Assignment4/Assignment4/Components/Routes.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSb3V0ZXMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
